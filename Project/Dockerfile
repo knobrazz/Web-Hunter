@@ -11,6 +11,10 @@ RUN apt-get update && apt-get install -y \
     libnet-ssleay-perl \
     openssl \
     libwww-perl \
+    python3-dev \
+    libffi-dev \
+    libssl-dev \
+    cargo \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
@@ -25,7 +29,9 @@ RUN git clone https://github.com/sullo/nikto.git /opt/nikto && \
 COPY . .
 
 # Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip && \
+    pip install wheel setuptools && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Install Go tools
 RUN go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
