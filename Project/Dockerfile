@@ -7,10 +7,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     nmap \
     nikto \
-    wapiti \
-    masscan \
-    dalfox \
-    subjack \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
@@ -28,12 +25,18 @@ RUN go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
 RUN go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
 RUN go install -v github.com/projectdiscovery/amass/v3/...@latest
 RUN go install -v github.com/hahwul/dalfox/v2@latest
+RUN go install -v github.com/haccer/subjack@latest
+
+# Install additional tools via go
+RUN GO111MODULE=on go install -v github.com/projectdiscovery/masscan@latest
 
 # Create necessary directories
 RUN mkdir -p results config/wordlists config/nuclei-templates
 
 # Set environment variables
 ENV PATH="/root/go/bin:${PATH}"
+ENV GOPATH=/root/go
+ENV GOBIN=/root/go/bin
 
 ENTRYPOINT ["python", "webhunter/cli.py"]
 
