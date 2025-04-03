@@ -15,7 +15,11 @@ RUN apt-get update && apt-get install -y \
     libffi-dev \
     libssl-dev \
     cargo \
+    python3-pip \
     && rm -rf /var/lib/apt/lists/*
+
+# Install Wapiti
+RUN pip3 install wapiti3
 
 # Set working directory
 WORKDIR /app
