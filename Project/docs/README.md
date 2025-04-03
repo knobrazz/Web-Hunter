@@ -11,12 +11,13 @@ Web-Hunter is a powerful automated reconnaissance tool designed for comprehensiv
 - Vulnerability Scanning
 - Cloud Infrastructure Analysis
 - Subdomain Takeover Detection
+- Nuclei Scan
 - API Integration
 
 ## Installation
 
 ```bash
-git clone https://github.com/nabaraj/web-hunter.git
+git clone https://github.com/knobrazz/web-hunter.git
 cd web-hunter
 pip install -r requirements.txt
 ```
