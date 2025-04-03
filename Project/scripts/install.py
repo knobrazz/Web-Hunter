@@ -91,7 +91,23 @@ def install_dependencies(python_path, pip_path):
         Path("webhunter/core/__init__.py").touch()
         Path("webhunter/modules/__init__.py").touch()
         
-        # Install the package in development mode in the virtual environment
+        # Ensure pyproject.toml exists and is valid
+        if not Path("pyproject.toml").exists():
+            print("Creating pyproject.toml...")
+            with open("pyproject.toml", "w") as f:
+                f.write('''[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "webhunter"
+version = "1.0.0"
+description = "Advanced Web Reconnaissance Tool"
+requires-python = ">=3.8"
+license = {text = "Apache-2.0"}
+''')
+        
+        # Install the package in development mode
         subprocess.run([str(pip_path), "install", "-e", "."], check=True)
         
         # Add the project directory to PYTHONPATH

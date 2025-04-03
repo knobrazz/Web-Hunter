@@ -1,30 +1,61 @@
-# Copyright 2025 nabar
-# 
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# 
-#     https://www.apache.org/licenses/LICENSE-2.0
-# 
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+from rich.console import Console
+from rich.text import Text
+from rich.panel import Panel
+from rich.style import Style
+from rich import box
+import time
+import sys
 
-import pyfiglet
-from termcolor import colored
-from typing import Optional
-
-def show_banner(custom_text: Optional[str] = None):
-    banner_text = custom_text or "Web-Hunter"
-    banner = pyfiglet.figlet_format(banner_text)
-    colored_banner = colored(banner, 'red', attrs=['bold'])
+def show_banner():
+    console = Console()
     
-    print(colored_banner)
-    print(colored("Created by Nabaraj Lamichhane", 'yellow'))
-    print(colored("\nCAUTION:", 'red', attrs=['bold']))
-    print(colored("Use it for ethical purposes only. If your government does not recommend", 'red'))
-    print(colored("these types of tools, avoid using them. Try at your own risk.\n", 'red'))
-    print(colored("=" * 80 + "\n", 'white'))
+    # VIP Banner text
+    banner_text = """
+    ██╗    ██╗███████╗██████╗ ██╗  ██╗██╗   ██╗███╗   ██╗████████╗███████╗██████╗ 
+    ██║    ██║██╔════╝██╔══██╗██║  ██║██║   ██║████╗  ██║╚══██╔══╝██╔════╝██╔══██╗
+    ██║ █╗ ██║█████╗  ██████╔╝███████║██║   ██║██╔██╗ ██║   ██║   █████╗  ██████╔╝
+    ██║███╗██║██╔══╝  ██╔══██╗██╔══██║██║   ██║██║╚██╗██║   ██║   ██╔══╝  ██╔══██╗
+    ╚███╔███╔╝███████╗██████╔╝██║  ██║╚██████╔╝██║ ╚████║   ██║   ███████╗██║  ██║
+     ╚══╝╚══╝ ╚══════╝╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚══════╝╚═╝  ╚═╝
+    """
+    
+    # Luxury gold gradient colors
+    colors = [
+        "yellow",
+        "yellow1",
+        "gold1",
+        "orange3",
+        "dark_orange",
+        "orange4"
+    ]
+    
+    # Create animated panel
+    def create_panel(color):
+        return Panel(
+            Text(banner_text, style=f"bold {color}"),
+            box=box.HEAVY,
+            border_style=f"bold {color}",
+            title="[bold]VIP Edition[/bold]",
+            subtitle="[bold]Advanced Web Reconnaissance Tool[/bold]"
+        )
+    
+    # Animation effect
+    try:
+        for color in colors:
+            console.clear()
+            console.print(create_panel(color))
+            time.sleep(0.2)
+        
+        # Final static display with additional info
+        console.clear()
+        final_panel = create_panel("gold1")
+        console.print(final_panel)
+        console.print("\n[bold gold1]✨ Welcome to WebHunter VIP Edition ✨[/bold gold1]")
+        console.print("[dim]Created by nabar[/dim]\n")
+        
+    except KeyboardInterrupt:
+        sys.exit(0)
+
+if __name__ == "__main__":
+    show_banner()
 
