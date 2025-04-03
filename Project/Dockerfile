@@ -56,7 +56,7 @@ COPY . .
 RUN pip install --upgrade pip && \
     pip install wheel setuptools && \
     pip install --no-cache-dir -r requirements.txt && \
-    pip install -e .
+    python setup.py develop
 
 # Create necessary directories
 RUN mkdir -p results config/wordlists config/nuclei-templates
