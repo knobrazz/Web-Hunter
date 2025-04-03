@@ -34,12 +34,24 @@ def install_tools():
     # Install nmap
     print("Please install Nmap from: https://nmap.org/download.html")
 
-def main():
-    print("Installing Web-Hunter dependencies...")
-    install_requirements()
-    install_tools()
-    print("Installation completed!")
+def install_dependencies():
+    try:
+        subprocess.run([sys.executable, "-m", "pip", "install", "-e", "."], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error installing dependencies: {e}")
+        sys.exit(1)
+
+def create_directories():
+    dirs = [
+        "results",
+        "config/wordlists",
+        "config/nuclei-templates"
+    ]
+    for dir_path in dirs:
+        Path(dir_path).mkdir(parents=True, exist_ok=True)
 
 if __name__ == "__main__":
-    main()
+    create_directories()
+    install_dependencies()
+    print("Installation completed successfully!")
 

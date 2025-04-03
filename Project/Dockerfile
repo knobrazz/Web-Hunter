@@ -15,6 +15,8 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     cargo \
     unzip \
+    masscan \
+    subjack \
     && rm -rf /var/lib/apt/lists/*
 
 # Install subfinder binary

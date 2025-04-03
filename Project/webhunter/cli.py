@@ -18,11 +18,12 @@ import click
 import yaml
 import sys
 from pathlib import Path
-from webhunter.core.banner import show_banner
-from webhunter.core.scanner import Scanner, ScanTarget
-
 import re
 from typing import Optional, List
+
+# Fix relative imports
+from webhunter.core.banner import show_banner
+from webhunter.core.scanner import Scanner, ScanTarget
 
 def validate_domain(ctx, param, value: Optional[str]) -> Optional[str]:
     """Validate domain name format."""

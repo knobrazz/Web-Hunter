@@ -15,8 +15,7 @@
 [build-system]
 requires = [
     "setuptools>=61.0",
-    "wheel",
-    "Cython>=3.0.0"
+    "wheel"
 ]
 build-backend = "setuptools.build_meta"
 
@@ -24,6 +23,20 @@ build-backend = "setuptools.build_meta"
 name = "webhunter"
 version = "1.0.0"
 description = "Advanced Web Reconnaissance Tool"
+authors = [{name = "nabar"}]
 requires-python = ">=3.8"
+dependencies = [
+    "click>=8.0.0",
+    "rich>=10.0.0",
+    "requests>=2.26.0",
+    "python-nmap>=0.7.1",
+    "pyyaml>=5.4.1",
+    "httpx>=0.24.0",
+    "tenacity>=8.0.0",
+    "masscan>=0.0.4"
+]
+
+[project.scripts]
+webhunter = "webhunter.cli:main"
 license = {text = "MIT"}
 
