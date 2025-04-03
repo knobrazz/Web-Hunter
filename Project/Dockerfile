@@ -25,10 +25,10 @@ RUN git clone https://github.com/sullo/nikto.git /opt/nikto && \
     ln -s /opt/nikto/program/nikto.pl /usr/local/bin/nikto && \
     chmod +x /usr/local/bin/nikto
 
-# Install Gitleaks
-RUN wget https://github.com/zricethezav/gitleaks/releases/download/v8.15.3/gitleaks_8.15.3_linux_x64.tar.gz && \
-    tar -xzf gitleaks_8.15.3_linux_x64.tar.gz -C /usr/local/bin/ && \
-    rm gitleaks_8.15.3_linux_x64.tar.gz && \
+# Install Gitleaks with updated version
+RUN wget https://github.com/zricethezav/gitleaks/releases/download/v8.24.2/gitleaks_8.24.2_linux_x64.tar.gz && \
+    tar -xzf gitleaks_8.24.2_linux_x64.tar.gz -C /usr/local/bin/ && \
+    rm gitleaks_8.24.2_linux_x64.tar.gz && \
     chmod +x /usr/local/bin/gitleaks
 
 # Copy project files
