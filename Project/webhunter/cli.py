@@ -20,9 +20,24 @@ from pathlib import Path
 from webhunter.core.banner import show_banner
 from webhunter.core.scanner import Scanner, ScanTarget
 
+import click
+import re
+from typing import Optional
+from .core.banner import show_banner
+
+def validate_domain(ctx, param, value: Optional[str]) -> Optional[str]:
+    """Validate domain name format."""
+    if value is None:
+        return None
+        
+    domain_pattern = r'^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$'
+    if not re.match(domain_pattern, value):
+        raise click.BadParameter('Invalid domain format. Example: example.com')
+    return value
+
 @click.group()
 def cli():
-    """Web-Hunter: Advanced Reconnaissance Tool"""
+    """Web-Hunter - Advanced Reconnaissance Tool"""
     show_banner()
 
 @cli.command()
