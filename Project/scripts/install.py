@@ -36,7 +36,26 @@ def create_venv():
     return python_path, pip_path
 
 def install_requirements(python_path, pip_path):
-    subprocess.check_call([str(pip_path), "install", "-r", "requirements.txt"])
+    try:
+        # Install build dependencies first
+        subprocess.check_call([str(pip_path), "install", "--upgrade", "pip", "setuptools", "wheel"])
+        subprocess.check_call([str(pip_path), "install", "cython"])
+        
+        # Then install project requirements
+        subprocess.check_call([str(pip_path), "install", "-r", "requirements.txt"])
+    except subprocess.CalledProcessError as e:
+        print(f"Error installing requirements: {e}")
+        print("\nTrying to install system dependencies...")
+        try:
+            # For Ubuntu/Debian systems
+            subprocess.check_call(["sudo", "apt-get", "update"])
+            subprocess.check_call(["sudo", "apt-get", "install", "-y", 
+                                 "python3-dev", "build-essential", "libyaml-dev"])
+            # Try installing requirements again
+            subprocess.check_call([str(pip_path), "install", "-r", "requirements.txt"])
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to install dependencies: {e}")
+            sys.exit(1)
 
 def install_tools():
     # Install Go if not installed
