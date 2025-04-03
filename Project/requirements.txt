@@ -14,5 +14,3 @@ pytest==7.0.1
 pytest-asyncio==0.18.1
 tenacity==8.2.2
 python-nmap==0.7.1
-gitleaks-core==8.15.3
-wapiti3==3.0.4
