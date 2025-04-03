@@ -33,11 +33,14 @@ class ScanTarget:
     subdomain_list: Optional[str] = None
 
 class Scanner:
-    def __init__(self, target: ScanTarget, output_dir: str):
+    def __init__(self, target, output_dir):
         self.target = target
-        self.base_output_dir = Path(output_dir)
-        self.current_target_dir = None
-        self.setup_directories()
+        self.output_dir = output_dir
+        self.threads = 10  # Default value
+
+    def set_threads(self, threads: int):
+        """Set the number of threads for scanning"""
+        self.threads = threads
 
     def setup_directories(self):
         # Create target-specific directory
