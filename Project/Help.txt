@@ -1,0 +1,58 @@
+Python3 Program to Make World most powerful automated recon tool. 
+Step 1 (Scan and Find all subdomains)
+Which if we supply 
+-d for Domain -w for Wildcard Domain -ip for ip address and -cidr for cidr checkup -wl for list of wildcard domains -list for subdomain list
+Now check input type and if -w/-wl (wildcard supply then scan all subdomains from every source or every tools used for scan subdomains like Amass, Subfinder, Assetfinder, Findomain, Knockpy MassDNS, Shuffledns, Lepus, Gau, CloudEnum, DNSDumpster)
+if -list supply dont check subdomains enumurations skip this step and go to next step.
+if -ip or -cidr supply then check all related information/ find all domain name that related with it using every possible tool and save it
+Afetr that find every live ports and save it too.
+After that Scan valid or alive subdomains using httpx and save it as alive subdomain with ip/domain:port
+Every step the output must save into specific directory and related to each step (We need to use after save it as a input)
+
+Step 2 (Finding and validate Endpoint from last saved file)
+Take input that recently saved as like ip:port or subdomains:ports file and and find every possible endpoints using (waybackurls, Katana, waymore, xurlfinder, arjun, hakrawler, ParamSpider, Photon, kiterunner, dirsearch, Linkfinder, JSParser, Amass,gau etc.)
+Now again remove endpoints that ends does not look like necessary like (jpg|jpeg|png|gif|bmp|tiff|ico|woff|woff2|ttf|otf|eot|css|scss|less|map|swf|flv|mp4|avi|mkv|webm|wav|mp3|ogg|svg|pdf|doc|docx| etc)
+Check all valid endpoints and save all-endpoints.txt
+Now sort all of the output and save it as all_valid_endpoints.txt and after that remove all same patterns to reduce the size of the file.
+After that find and filter critical and high types of endpoints like (api, config, git, .env, .bak, .zip, .sql, .log, .json, debug, payment, id, email, url, file, upload, admin, root, dashboard, console, manager, administrator, password, .rar, .gz etc) and save it critical-endpoints.txt
+Again now filter all javascript files and save it as all-js.txt and check all leak credentials (Password, Token, Auth, Secrets, JTW, API, s3 bucket, or other secret creds) using SecretFinder.py, linkfinder, nuclei js-exposed etc (all possible).
+
+Step3 (Vulnerability Scanning)
+Use (dalfox, ghauri, Wapiti, Gitleaks, AWS Prowler, Gitleaks, SSRFPwn, Commix, nikto, nuclei, UploadScanner, LFISuite, Metasploit, Naabu, Subjack, Takeover, PwnXSS, XAttacker, CVE-Scan, Teler, RouterSploit, Sn1per, etc) for scanning every possible vulnerability from critical-endpoints.txt and all-js.txt and display every vulnerability with Proof of concept and save it too as vulnerability.json
+
+Step 4 (Advance Scan Using Nuclei)
+Preform all types of scanning bug with severity Critical, High, Medium, Low from critical-endpoints.txt and all-js.txt and save result as nuclei_result.json
+Find all technology used in this web-apps , save it category wise and display also.
+Subdomain Takeover Checks (Subjack, Takeover, Snitch, Can-I-Take-Over-X)
+Cloud Misconfigurations Checks (AWSPwn, GCPBucketBrute, Azucar)
+DNS Hijacking & Poisoning Checks (DNSReaper, dnstake)
+Kubernetes & Docker Scanning (Kube-hunter, Docker-bench, Trivy)
+AWS/GCP/Azure Misconfigurations (Prowler, ScoutSuite, CloudBrute)
+Ethereum & Solana smart contract auditing (Mythril, Slither)
+Social Media Recon (Sherlock, theHarvester, Maigret)
+Dark Web Scanning (OnionSearch, Hunchly)
+Email & Credential Leaks (Breach-Parse, Hibp-CLI)
+
+
+Step 5 (Add other essential features)
+Add resume feature,  At start Banner name "Web-Hunter" Created by Nabaraj Lamichhane
+Add some caution like "Use it for ethical purpose only and if your government did not recommend this types of tools then avoid to use it. Try at your own risk"
+Add requirements.txt and README.md also.
+
+Step 6 Extra
+Parallel Processing: Use asyncio & threading to speed up scans.
+Custom Configurations: Allow users to select scanning modules.
+Docker Support: Package into a Docker container for easy deployment.
+Webhook Support: Send scan results to Slack or Discord.
+JSON Output for API Usage: Make vulnerability.json machine-readable.
+Use structured output directories (/results/{target}/stepX/)
+Add exception handling & logging to prevent crashes
+Reduce redundant scanning by using stored results
+Real-time Monitoring & Continuous Recon
+Supports multiple output formats (JSON, CSV, Markdown)
+Auto update signatures & rules (via GitHub sync)
+Custom scripting support (like Burp Suite Extensions)
+Stealth Mode & Evasion
+AI & Machine Learning for Automated Analysis
+
+Now give me only roadmaps for it and give me any suggestion if there any mistake.

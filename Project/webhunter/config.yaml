@@ -1,0 +1,65 @@
+# Web-Hunter Configuration File
+
+# Scanner Settings
+scanner:
+  threads: 10
+  timeout: 30
+  rate_limit: 100
+  user_agent: "Web-Hunter/1.0"
+
+# Module Settings
+modules:
+  subdomain_enum:
+    enabled: true
+    tools:
+      - subfinder
+      - amass
+      - assetfinder
+    wordlist: "wordlists/subdomains.txt"
+
+  port_scan:
+    enabled: true
+    ports: "1-65535"
+    rate: 1000
+
+  endpoint_enum:
+    enabled: true
+    exclude_extensions:
+      - jpg
+      - png
+      - css
+      - js
+
+  vulnerability_scan:
+    enabled: true
+    severity:
+      - critical
+      - high
+      - medium
+
+  js_analysis:
+    enabled: true
+    check_secrets: true
+
+  cloud_scan:
+    enabled: true
+    services:
+      - aws
+      - gcp
+      - azure
+
+# Output Settings
+output:
+  directory: "results"
+  formats:
+    - json
+    - csv
+  webhook_url: ""
+
+# API Settings
+api:
+  enabled: false
+  host: "127.0.0.1"
+  port: 8080
+  key: ""
+

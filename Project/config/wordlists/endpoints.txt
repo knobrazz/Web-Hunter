@@ -1,0 +1,16 @@
+/admin
+/login
+/api
+/dashboard
+/config
+/backup
+/dev
+/test
+/debug
+/console
+/phpinfo
+/.git
+/.env
+/wp-admin
+/administrator
+

@@ -1,0 +1,22 @@
+id: web-hunter-basic-checks
+info:
+  name: Web-Hunter Basic Security Checks
+  author: nabar
+  severity: info
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/.git/config"
+      - "{{BaseURL}}/.env"
+      - "{{BaseURL}}/api/swagger"
+      - "{{BaseURL}}/admin"
+    matchers:
+      - type: word
+        words:
+          - "[core]"
+          - "DB_PASSWORD"
+          - "swagger"
+          - "admin"
+        condition: or
+

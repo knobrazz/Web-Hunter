@@ -1,0 +1,61 @@
+Web-Hunter/
+│── tools/                      # Third-party tools (like Subfinder, Amass, etc.)
+│   ├── subdomain/               # Subdomain enumeration tools
+│   ├── portscan/                # Port scanning tools
+│   ├── vulnerability/           # Exploit & vulnerability scanners
+│   ├── osint/                   # OSINT tools (e.g., Sherlock, theHarvester)
+│   ├── js-analysis/             # JavaScript file analysis
+│   ├── cloud/                   # Cloud security tools
+│   ├── mobile/                  # Mobile security tools
+│
+│── webhunter/                   # Main source code
+│   ├── __init__.py              # Python package initialization
+│   ├── core/                    # Core scanning engine
+│   │   ├── banner.py            # Prints the Web-Hunter banner
+│   │   ├── scanner.py           # Core scanning logic
+│   │   ├── utils.py             # Helper functions
+│   │   ├── config.py            # Configurations & settings
+│   │   ├── report.py            # Reporting engine
+│   ├── modules/                 # Individual scanning modules
+│   │   ├── subdomain_enum.py    # Subdomain enumeration
+│   │   ├── port_scanner.py      # Port scanning
+│   │   ├── endpoint_enum.py     # Endpoint discovery
+│   │   ├── js_analyzer.py       # JavaScript file analysis
+│   │   ├── vuln_scanner.py      # Vulnerability scanning
+│   │   ├── cloud_scanner.py     # AWS, GCP, Azure misconfig
+│   │   ├── takeover_checker.py  # Subdomain takeover detection
+│   ├── api/                     # API integration for automation
+│   ├── cli.py                   # CLI interface
+│   ├── config.yaml              # User-configurable settings
+│
+│── results/                     # Stores scan results
+│   ├── example.com/             # Directory per target
+│   │   ├── subdomains.txt       
+│   │   ├── ports.txt
+│   │   ├── endpoints.txt
+│   │   ├── vulnerabilities.json
+│   │   ├── nuclei_result.json
+│
+│── docs/                        # Documentation & guides
+│   ├── README.md                # Main documentation
+│   ├── USAGE.md                 # Detailed usage guide
+│   ├── CONFIG.md                # Config file documentation
+│
+│── config/                      # Default scanning configurations
+│   ├── nuclei-templates/        # Nuclei template configs
+│   ├── wordlists/               # Custom wordlists (subdomains, endpoints)
+│
+│── scripts/                     # Extra helper scripts
+│   ├── install.sh               # Install dependencies (Linux/macOS)
+│   ├── install.bat              # Install dependencies (Windows)
+│   ├── update.py                # Auto-update tool
+│
+│── tests/                       # Automated tests for each module
+│   ├── test_subdomain_enum.py  
+│   ├── test_vuln_scanner.py  
+│
+│── Dockerfile                   # Docker container setup
+│── requirements.txt             # Python dependencies
+│── setup.py                     # Package setup script
+│── .gitignore                   # Ignore unnecessary files
+│── LICENSE                      # Open-source license
