@@ -11,13 +11,18 @@ Web-Hunter is a powerful automated reconnaissance tool designed for comprehensiv
 - Vulnerability Scanning
 - Cloud Infrastructure Analysis
 - Subdomain Takeover Detection
-- Nuclei Scan
 - API Integration
 
 ## Installation
 
+### Prerequisites
+- Python 3.8 or higher
+- Go 1.16 or higher
+- Docker (optional)
+
+### Standard Installation
 ```bash
-git clone https://github.com/knobrazz/web-hunter.git
+git clone https://github.com/nabaraj/web-hunter.git
 cd web-hunter
 pip install -r requirements.txt
 ```
