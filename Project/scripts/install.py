@@ -39,10 +39,23 @@ def install_requirements(python_path, pip_path):
     try:
         # Install build dependencies first
         subprocess.check_call([str(pip_path), "install", "--upgrade", "pip", "setuptools", "wheel"])
-        subprocess.check_call([str(pip_path), "install", "cython"])
         
-        # Then install project requirements
-        subprocess.check_call([str(pip_path), "install", "-r", "requirements.txt"])
+        # Install Cython and PyYAML separately first
+        subprocess.check_call([str(pip_path), "install", "cython"])
+        subprocess.check_call([str(pip_path), "install", "--no-build-isolation", "pyyaml"])
+        
+        # Then install remaining project requirements
+        with open("requirements.txt") as f:
+            reqs = [line.strip() for line in f if "pyyaml" not in line.lower()]
+        
+        for req in reqs:
+            if req and not req.startswith("#"):
+                try:
+                    subprocess.check_call([str(pip_path), "install", req])
+                except subprocess.CalledProcessError:
+                    print(f"Failed to install {req}, continuing...")
+                    continue
+                    
     except subprocess.CalledProcessError as e:
         print(f"Error installing requirements: {e}")
         print("\nTrying to install system dependencies...")
