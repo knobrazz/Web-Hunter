@@ -6,12 +6,20 @@ RUN apt-get update && apt-get install -y \
     git \
     wget \
     nmap \
-    nikto \
     build-essential \
+    perl \
+    libnet-ssleay-perl \
+    openssl \
+    libwww-perl \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
+
+# Install Nikto
+RUN git clone https://github.com/sullo/nikto.git /opt/nikto && \
+    ln -s /opt/nikto/program/nikto.pl /usr/local/bin/nikto && \
+    chmod +x /usr/local/bin/nikto
 
 # Copy project files
 COPY . .
