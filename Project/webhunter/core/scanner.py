@@ -9,6 +9,11 @@ import warnings
 from rich.console import Console
 from rich.progress import Progress
 from concurrent.futures import ThreadPoolExecutor
+from ..modules.vuln_scanner import VulnerabilityScanner
+from ..modules.port_scanner import PortScanner
+from ..modules.subdomain_enum import SubdomainEnumerator
+from ..modules.endpoint_enum import EndpointEnumerator
+from ..modules.cloud_scanner import CloudScanner
 
 warnings.filterwarnings('ignore', message='Unverified HTTPS request')
 
@@ -32,6 +37,20 @@ class Scanner:
         self.console = Console()
         self.results: Dict = {}
         self.executor = ThreadPoolExecutor(max_workers=self._threads)
+        self.wordlist = None
+        
+        # Initialize scanners
+        self.vuln_scanner = VulnerabilityScanner(self.output_dir, self._threads)
+        self.port_scanner = PortScanner(self.output_dir, self._threads)
+        self.subdomain_enum = SubdomainEnumerator(self.output_dir)
+        self.endpoint_enum = EndpointEnumerator(self.output_dir)
+        self.cloud_scanner = CloudScanner(self.output_dir)
+
+    def set_wordlist(self, wordlist_path: str) -> None:
+        """Set custom wordlist for enumeration"""
+        self.wordlist = Path(wordlist_path)
+        if not self.wordlist.exists():
+            raise FileNotFoundError(f"Wordlist not found: {wordlist_path}")
 
     @property
     def threads(self) -> int:
@@ -110,33 +129,76 @@ class Scanner:
 
         try:
             async with Progress() as progress:
-                # Subdomain enumeration
+                # Step 1: Subdomain Enumeration
                 if self.target.domain:
-                    task1 = progress.add_task("[cyan]Running subdomain enumeration...", total=100)
-                    subdomains = await self.run_subfinder()
-                    self.results['subdomains'] = subdomains
+                    task1 = progress.add_task("[cyan]1. Running subdomain enumeration...", total=100)
+                    subdomains = await self.subdomain_enum.enumerate_subdomains(self.target.domain)
+                    self.results['subdomains'] = list(subdomains)
                     progress.update(task1, completed=100)
 
+                    # Step 2: Port Scanning
                     if subdomains:
-                        # Port scanning
-                        task2 = progress.add_task("[magenta]Running port scans...", total=len(subdomains))
-                        for subdomain in subdomains:
-                            self.results.setdefault('port_scans', {})[subdomain] = await self.run_nmap_scan(subdomain)
-                            progress.update(task2, advance=1)
+                        task2 = progress.add_task("[magenta]2. Running port scans...", total=len(subdomains))
+                        port_results = await self.port_scanner.scan_multiple_targets(list(subdomains))
+                        self.results['port_scans'] = port_results
+                        progress.update(task2, completed=len(subdomains))
 
-                        # HTTP checks
-                        task3 = progress.add_task("[green]Checking HTTP services...", total=len(subdomains))
+                        # Step 3: Service Enumeration
+                        task3 = progress.add_task("[green]3. Enumerating services...", total=len(subdomains))
                         for subdomain in subdomains:
-                            self.results.setdefault('http_checks', {})[subdomain] = await self.check_http(subdomain)
+                            service_info = await self.check_http(subdomain)
+                            self.results.setdefault('services', {})[subdomain] = service_info
                             progress.update(task3, advance=1)
 
-            # Save results
+                        # Step 4: Endpoint Discovery
+                        task4 = progress.add_task("[yellow]4. Discovering endpoints...", total=len(subdomains))
+                        endpoints = await self.endpoint_enum.enumerate_endpoints(list(subdomains))
+                        self.results['endpoints'] = list(endpoints)
+                        progress.update(task4, completed=len(subdomains))
+
+                        # Step 5: Vulnerability Scanning
+                        task5 = progress.add_task("[red]5. Scanning vulnerabilities...", total=len(subdomains))
+                        vuln_results = await self.vuln_scanner.scan_targets(list(subdomains))
+                        self.results['vulnerabilities'] = vuln_results
+                        progress.update(task5, completed=len(subdomains))
+
+                # Step 6: Cloud Infrastructure Scanning
+                if self.target.domain:
+                    task6 = progress.add_task("[blue]6. Scanning cloud infrastructure...", total=100)
+                    cloud_results = await self.cloud_scanner.scan_cloud_assets(self.target.domain)
+                    self.results['cloud_assets'] = cloud_results
+                    progress.update(task6, completed=100)
+
+            # Save detailed results
             results_file = self.output_dir / f"{self.target.domain or self.target.ip or 'scan'}_results.json"
             with open(results_file, 'w') as f:
                 json.dump(self.results, f, indent=4)
+
+            # Generate summary report
+            await self.generate_summary_report()
 
             self.console.print(f"[green]Scan completed! Results saved to {results_file}[/green]")
         except Exception as e:
             self.console.print(f"[red]Error during scan: {e}[/red]")
             raise
+
+    async def generate_summary_report(self):
+        """Generate a summary report of findings"""
+        summary_file = self.output_dir / f"{self.target.domain or self.target.ip or 'scan'}_summary.txt"
+        with open(summary_file, 'w') as f:
+            f.write("Web-Hunter Scan Summary\n")
+            f.write("=" * 50 + "\n\n")
+            
+            if 'subdomains' in self.results:
+                f.write(f"Subdomains Found: {len(self.results['subdomains'])}\n")
+            
+            if 'vulnerabilities' in self.results:
+                f.write("\nVulnerabilities Summary:\n")
+                for vuln_type, findings in self.results['vulnerabilities'].items():
+                    f.write(f"{vuln_type}: {len(findings)} findings\n")
+            
+            if 'cloud_assets' in self.results:
+                f.write("\nCloud Assets Found:\n")
+                for cloud, assets in self.results['cloud_assets'].items():
+                    f.write(f"{cloud}: {len(assets)} resources\n")
 
