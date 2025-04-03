@@ -2,9 +2,8 @@ FROM python:3.9-slim
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    golang \
-    git \
     wget \
+    git \
     nmap \
     build-essential \
     perl \
@@ -15,11 +14,26 @@ RUN apt-get update && apt-get install -y \
     libffi-dev \
     libssl-dev \
     cargo \
-    python3-pip \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Wapiti
-RUN pip3 install wapiti3
+# Install subfinder binary
+RUN wget https://github.com/projectdiscovery/subfinder/releases/download/v2.6.3/subfinder_2.6.3_linux_amd64.zip && \
+    unzip subfinder_2.6.3_linux_amd64.zip -d /usr/local/bin/ && \
+    rm subfinder_2.6.3_linux_amd64.zip && \
+    chmod +x /usr/local/bin/subfinder
+
+# Install nuclei binary
+RUN wget https://github.com/projectdiscovery/nuclei/releases/download/v3.1.6/nuclei_3.1.6_linux_amd64.zip && \
+    unzip nuclei_3.1.6_linux_amd64.zip -d /usr/local/bin/ && \
+    rm nuclei_3.1.6_linux_amd64.zip && \
+    chmod +x /usr/local/bin/nuclei
+
+# Install httpx binary
+RUN wget https://github.com/projectdiscovery/httpx/releases/download/v1.3.7/httpx_1.3.7_linux_amd64.zip && \
+    unzip httpx_1.3.7_linux_amd64.zip -d /usr/local/bin/ && \
+    rm httpx_1.3.7_linux_amd64.zip && \
+    chmod +x /usr/local/bin/httpx
 
 # Set working directory
 WORKDIR /app
