@@ -52,27 +52,11 @@ RUN wget https://github.com/zricethezav/gitleaks/releases/download/v8.24.2/gitle
 # Copy project files
 COPY . .
 
-# Install Python dependencies
+# Install Python dependencies and the webhunter package
 RUN pip install --upgrade pip && \
     pip install wheel setuptools && \
-    pip install --no-cache-dir -r requirements.txt
-
-# Remove these sections
-# Install Go tools
-# RUN go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
-# RUN go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
-# RUN go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
-# RUN go install -v github.com/projectdiscovery/amass/v3/...@latest
-# RUN go install -v github.com/hahwul/dalfox/v2@latest
-# RUN go install -v github.com/haccer/subjack@latest
-
-# Install additional tools via go
-# RUN GO111MODULE=on go install -v github.com/projectdiscovery/masscan@latest
-
-# Remove Go environment variables
-# ENV PATH="/root/go/bin:${PATH}"
-# ENV GOPATH=/root/go
-# ENV GOBIN=/root/go/bin
+    pip install --no-cache-dir -r requirements.txt && \
+    pip install -e .
 
 # Create necessary directories
 RUN mkdir -p results config/wordlists config/nuclei-templates
