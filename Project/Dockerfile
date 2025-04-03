@@ -30,9 +30,9 @@ RUN wget https://github.com/projectdiscovery/nuclei/releases/download/v3.1.6/nuc
     chmod +x /usr/local/bin/nuclei
 
 # Install httpx binary
-RUN wget https://github.com/projectdiscovery/httpx/releases/download/v1.3.7/httpx_1.3.7_linux_amd64.zip && \
-    unzip httpx_1.3.7_linux_amd64.zip -d /usr/local/bin/ && \
-    rm httpx_1.3.7_linux_amd64.zip && \
+RUN wget https://github.com/projectdiscovery/httpx/releases/download/v1.3.8/httpx_1.3.8_linux_amd64.zip && \
+    unzip httpx_1.3.8_linux_amd64.zip -d /usr/local/bin/ && \
+    rm httpx_1.3.8_linux_amd64.zip && \
     chmod +x /usr/local/bin/httpx
 
 # Set working directory
@@ -57,16 +57,22 @@ RUN pip install --upgrade pip && \
     pip install wheel setuptools && \
     pip install --no-cache-dir -r requirements.txt
 
+# Remove these sections
 # Install Go tools
-RUN go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
-RUN go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
-RUN go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
-RUN go install -v github.com/projectdiscovery/amass/v3/...@latest
-RUN go install -v github.com/hahwul/dalfox/v2@latest
-RUN go install -v github.com/haccer/subjack@latest
+# RUN go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+# RUN go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
+# RUN go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
+# RUN go install -v github.com/projectdiscovery/amass/v3/...@latest
+# RUN go install -v github.com/hahwul/dalfox/v2@latest
+# RUN go install -v github.com/haccer/subjack@latest
 
 # Install additional tools via go
-RUN GO111MODULE=on go install -v github.com/projectdiscovery/masscan@latest
+# RUN GO111MODULE=on go install -v github.com/projectdiscovery/masscan@latest
+
+# Remove Go environment variables
+# ENV PATH="/root/go/bin:${PATH}"
+# ENV GOPATH=/root/go
+# ENV GOBIN=/root/go/bin
 
 # Create necessary directories
 RUN mkdir -p results config/wordlists config/nuclei-templates
