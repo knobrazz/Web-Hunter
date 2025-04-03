@@ -31,7 +31,7 @@ RUN wget https://github.com/projectdiscovery/nuclei/releases/download/v3.1.6/nuc
 
 # Install httpx binary
 RUN wget https://github.com/projectdiscovery/httpx/releases/download/v1.3.8/httpx_1.3.8_linux_amd64.zip && \
-    unzip httpx_1.3.8_linux_amd64.zip -d /usr/local/bin/ && \
+    unzip -o httpx_1.3.8_linux_amd64.zip -d /usr/local/bin/ && \
     rm httpx_1.3.8_linux_amd64.zip && \
     chmod +x /usr/local/bin/httpx
 
@@ -76,11 +76,6 @@ RUN pip install --upgrade pip && \
 
 # Create necessary directories
 RUN mkdir -p results config/wordlists config/nuclei-templates
-
-# Set environment variables
-ENV PATH="/root/go/bin:${PATH}"
-ENV GOPATH=/root/go
-ENV GOBIN=/root/go/bin
 
 ENTRYPOINT ["python", "webhunter/cli.py"]
 
