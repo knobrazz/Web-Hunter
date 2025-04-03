@@ -40,7 +40,6 @@ def cli():
     """Web-Hunter - Advanced Reconnaissance Tool"""
     show_banner()
 
-# Combine the two scan functions into one
 @cli.command()
 @click.option('-d', '--domain', callback=validate_domain)
 @click.option('-w', '--wordlist', type=click.Path(exists=True))
@@ -63,7 +62,9 @@ def scan(domain, wordlist, threads, wildcard, ip_address, cidr, wildcard_list, s
             subdomain_list=subdomain_list
         )
         
-        scanner = Scanner(target, "results", threads=threads)
+        # Modified Scanner initialization
+        scanner = Scanner(target, "results")
+        scanner.set_threads(threads)  # Set threads after initialization
         asyncio.run(scanner.start_scan(modules))
     except Exception as e:
         click.echo(f"Error: {e}", err=True)
